@@ -1,2 +1,2 @@
 require 'ocr/account_reader'
-require 'ocr/line_group'
+require 'ocr/glyph_reader'
