@@ -1,0 +1,8 @@
+#!/bin/ruby
+
+require 'ocr'
+
+reader = OCR::AccountReader.new($stdin)
+while accout_number = reader.next
+  puts accout_number
+end
