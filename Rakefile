@@ -2,8 +2,14 @@
 
 require 'rake/clean'
 
-task :default => :specs
+CLEAN.include("tmp")
+
+task :default => [:specs, :stories]
 
 task :specs do
   sh "rspec spec"
+end
+
+task :stories do |task|
+  sh "rspec stories"
 end
