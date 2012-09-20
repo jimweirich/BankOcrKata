@@ -1,11 +1,13 @@
 module OCR
   class AccountReader
     def initialize(instream)
-      @instream = instream
+      @gr = GlyphReader.new(instream)
     end
 
     def next
-      nil
+      g = @gr.next
+      return nil unless g
+      g.value
     end
   end
 end

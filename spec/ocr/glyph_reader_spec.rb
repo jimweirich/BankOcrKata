@@ -5,6 +5,8 @@ describe OCR::GlyphReader do
   Given(:group) { OCR::GlyphReader.new(input_io) }
 
   context "with a single glyph" do
+    Given(:lines) { result.lines }
+
     When(:result) { group.next }
 
     context "terminated by an end of file" do
@@ -13,10 +15,10 @@ describe OCR::GlyphReader do
         "|_ \n" +
         " _|\n"
       }
-      Then { result.should == [
-          " _ ",
-          "|_ ",
-          " _|"  ]
+      Then { result.should == OCR::Glyph.new([
+            " _ ",
+            "|_ ",
+            " _|"  ])
       }
     end
 
@@ -27,10 +29,25 @@ describe OCR::GlyphReader do
         " _|\n" +
         "\n"
       }
-      Then { result.should == [
-          " _ ",
-          "|_ ",
-          " _|"  ]
+      Then { result.should == OCR::Glyph.new([
+            " _ ",
+            "|_ ",
+            " _|"  ])
+      }
+    end
+
+
+    context "with some lines shortened due to trailing blanks" do
+      Given(:input) {
+        " _\n" +
+        "|_ \n" +
+        " _|\n" +
+        "\n"
+      }
+      Then { result.should == OCR::Glyph.new([
+            " _ ",
+            "|_ ",
+            " _|"  ])
       }
     end
 
@@ -41,10 +58,10 @@ describe OCR::GlyphReader do
         "  |\n" +
         "\n"
       }
-      Then { result.should == [
-          "   ",
-          "  |",
-          "  |" ]
+      Then { result.should == OCR::Glyph.new([
+            "   ",
+            "  |",
+            "  |" ])
       }
     end
 
@@ -55,10 +72,10 @@ describe OCR::GlyphReader do
         "  ||_  _|\n" +
         "\n"
       }
-      Then { result.should == [
-          "    _  _ ",
-          "  | _| _|",
-          "  ||_  _|" ]
+      Then { result.should == OCR::Glyph.new([
+            "    _  _ ",
+            "  | _| _|",
+            "  ||_  _|" ])
       }
     end
 
@@ -67,52 +84,9 @@ describe OCR::GlyphReader do
       Then { result.should be_nil }
     end
 
-    context "with illegal characters" do
-      Given(:input) {
-        "    _  _ \n" +
-        "  | _| _|\n" +
-        "  ||_ x_|\n" +
-        "\n"
-      }
-      Then { result.should have_failed(OCR::IllformedGlyphError, /illegal character/i)  }
-    end
-
-    context "with mismatching line lengths" do
-      Given(:input) {
-        "    _  _    \n" +
-        "  | _| _|\n" +
-        "  ||_  _|\n" +
-        "\n"
-      }
-      Then { result.should have_failed(OCR::IllformedGlyphError, /mismatch.*length/i)  }
-    end
-
-    context "with lines lengths not divisible by 3" do
-      Given(:input) {
-        "    _  _  \n" +
-        "  | _| _| \n" +
-        "  ||_  _| \n"
-      }
-      Then { result.should have_failed(OCR::IllformedGlyphError, /length.*(3|three)/i)  }
-    end
-
-    context "with missing lines" do
-      Given(:input) {
-        "    _  _ \n" +
-        "  | _| _|\n"
-      }
-      Then { result.should have_failed(OCR::IllformedGlyphError, /(3|three) lines/i)  }
-    end
   end
 
   context "with multiple groups" do
-    When(:result) {
-      result = []
-      while g = group.next
-        result << g
-      end
-      result
-    }
     Given(:input) {
       "    _  _ \n" +
       "  | _| _|\n" +
@@ -123,13 +97,24 @@ describe OCR::GlyphReader do
       "  | _||_|\n" +
       "\n"
     }
+
+    When(:result) {
+      result = []
+      while g = group.next
+        result << g
+      end
+      result
+    }
+
     Then { result.should == [
-        [ "    _  _ ",
-          "  | _| _|",
-          "  ||_  _|" ],
-        [ "    _  _ ",
-          "|_||_ |_ ",
-          "  | _||_|" ],
+        OCR::Glyph.new([
+            "    _  _ ",
+            "  | _| _|",
+            "  ||_  _|" ]),
+        OCR::Glyph.new([
+            "    _  _ ",
+            "|_||_ |_ ",
+            "  | _||_|" ]),
       ]
     }
   end
