@@ -2,12 +2,12 @@ require 'spec_helper'
 
 describe OCR::AccountReader do
   Given(:input_io) { StringIO.new(input) }
-  Given(:group) { OCR::AccountReader.new(input_io) }
+  Given(:reader) { OCR::AccountReader.new(input_io) }
 
   context "with a single glyph" do
     Given(:lines) { result.lines }
 
-    When(:result) { group.next }
+    When(:result) { reader.read_account_number }
 
     context "terminated by an end of file" do
       Given(:input) {
@@ -86,7 +86,7 @@ describe OCR::AccountReader do
 
   end
 
-  context "with multiple groups" do
+  context "with multiple account numbers" do
     Given(:input) {
       "    _  _ \n" +
       "  | _| _|\n" +
@@ -98,13 +98,7 @@ describe OCR::AccountReader do
       "\n"
     }
 
-    When(:result) {
-      result = []
-      while g = group.next
-        result << g
-      end
-      result
-    }
+    When(:result) { reader.to_a }
 
     Then { result.should == [
         OCR::Glyph.new([
