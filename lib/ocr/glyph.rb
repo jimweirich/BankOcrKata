@@ -30,6 +30,10 @@ module OCR
       @lines == other.lines
     end
 
+    def to_s
+      value
+    end
+
     attr_reader :lines
     protected :lines
 

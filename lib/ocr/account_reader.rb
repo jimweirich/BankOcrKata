@@ -1,13 +1,20 @@
+require 'ocr/glyph'
+
 module OCR
   class AccountReader
-    def initialize(instream)
-      @gr = GlyphReader.new(instream)
+    def initialize(in_stream)
+      @in_stream = in_stream
     end
 
     def next
-      g = @gr.next
-      return nil unless g
-      g.value
+      result = []
+      3.times {
+        line = @in_stream.gets
+        return nil if line.nil?
+        result << line.chomp
+      }
+      @in_stream.gets
+      Glyph.new(result)
     end
   end
 end

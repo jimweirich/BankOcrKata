@@ -3,6 +3,6 @@
 require 'ocr'
 
 reader = OCR::AccountReader.new($stdin)
-while accout_number = reader.next
-  puts accout_number
+while account_number = reader.next
+  puts account_number
 end
