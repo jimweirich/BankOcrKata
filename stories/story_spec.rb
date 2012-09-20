@@ -24,13 +24,13 @@ describe "User Stories" do
   end
 
   context "#3" do
-    Given { pending "Completion of User Story 1" }
+    Given { pending "Completion of User Story 3" }
     Given(:story) { 3 }
     Then { }
   end
 
   context "#4" do
-    Given { pending "Completion of User Story 1" }
+    Given { pending "Completion of User Story 4" }
     Given(:story) { 4 }
     Then { }
   end
