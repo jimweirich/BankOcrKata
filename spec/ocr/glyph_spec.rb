@@ -2,8 +2,10 @@ require 'spec_helper'
 
 describe OCR::Glyph do
 
-  describe "Values" do
+  context "when well formed" do
     Given(:glyph) { OCR::Glyph.new(lines) }
+    Invariant { glyph.should be_legible }
+    Invariant { glyph.should_not be_illegible }
 
     context "with a single numeral" do
       Given(:lines) {
@@ -43,6 +45,17 @@ describe OCR::Glyph do
     end
   end
 
+  context "with an unrecognized digit" do
+    Given(:lines) {
+      [ "    _  _ ",
+        "  | _  _|",
+        "  ||_  _|" ]
+    }
+    When(:glyph) { OCR::Glyph.new(lines) }
+    Then { glyph.value.should == "1?3" }
+    And  { glyph.should be_illegible }
+    And  { glyph.should_not be_legible }
+  end
 
   describe "illformed glyphs" do
     When(:result) { OCR::Glyph.new(lines) }
@@ -72,16 +85,15 @@ describe OCR::Glyph do
       }
       Then { result.should have_failed(OCR::IllformedGlyphError, /(3|three) lines/i)  }
     end
+  end
 
-    context "with an unrecognized digit" do
-      Given(:lines) {
-        [ "    _  _ ",
-          "  | _  _|",
-          "  ||_  _|" ]
-      }
-      Then { result.should have_failed(OCR::IllformedGlyphError, /digit/i)  }
-    end
+  describe "creating glyphs from digit strings" do
+    Given(:digits) { "0123456789" }
+    Given(:lines) { glyph.send(:lines) }
 
+    When(:glyph) { OCR::Glyph.from_digits(digits) }
+
+    Then { glyph.value.should == digits }
   end
 
 end

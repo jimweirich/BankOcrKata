@@ -44,6 +44,16 @@ module OCR
       " _|" => "9",
     }
 
+    def self.by_width(string)
+      string.scan(/.../)
+    end
+
+    def self.reverse_lookup(to_digit)
+      to_digit.inject({}) { |h, (k,v)| h.merge(v => by_width(k)) }
+    end
+
+    FROM_DIGIT = reverse_lookup(TO_DIGIT)
+
     attr_reader :value
 
     def initialize(lines)
@@ -74,14 +84,24 @@ module OCR
     attr_reader :lines
     protected :lines
 
+    def self.from_digits(string)
+      first, *rest = string.chars.map { |nc| FROM_DIGIT[nc] }
+      lines = first.zip(*rest).map { |f| f.join }
+      new(lines)
+    end
+
     private
 
     def calculate_value
-      tops, mids, bots = lines.map { |ln| ln.scan(/.../) }
+      tops, mids, bots = lines.map { |ln| by_width(ln) }
       encodings = tops.zip(mids, bots).map { |en| en.join }
       encodings.map { |en|
         TO_DIGIT[en] || "?"
       }.join
+    end
+
+    def by_width(string)
+      self.class.by_width(string)
     end
 
     def normalize_line_lengths
