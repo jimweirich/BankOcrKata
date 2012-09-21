@@ -88,12 +88,17 @@ describe OCR::Glyph do
   end
 
   describe "creating glyphs from digit strings" do
-    Given(:digits) { "0123456789" }
-    Given(:lines) { glyph.send(:lines) }
-
     When(:glyph) { OCR::Glyph.from_digits(digits) }
 
-    Then { glyph.value.should == digits }
+    context "with legible chars" do
+      Given(:digits) { "0123456789" }
+      Then { glyph.value.should == digits }
+    end
+
+    context "with illegible chars" do
+      Given(:digits) { "01234?6789" }
+      Then { glyph.value.should == digits }
+    end
   end
 
 end

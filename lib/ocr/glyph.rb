@@ -33,16 +33,16 @@ module OCR
       value
     end
 
-    attr_reader :lines
-    protected :lines
-
     def self.from_digits(string)
-      first, *rest = string.chars.map { |nc| FROM_DIGIT[nc] }
+      first, *rest = string.chars.map { |nc| FROM_DIGIT[nc] || ["   ", "   ", "   "] }
       lines = first.zip(*rest).map { |f| f.join }
       new(lines)
     end
 
     private
+
+    attr_reader :lines
+    protected :lines
 
     def calculate_value
       tops, mids, bots = lines.map { |ln| by_width(ln) }
