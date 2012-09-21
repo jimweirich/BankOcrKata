@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe OCR::CheckSum do
-  Given(:checker) { OCR::CheckSum.new }
+  Given(:checker) { OCR::CHECKER }
 
   describe "#checksum" do
     Then { checker.check_sum("000000000").should == 0 }

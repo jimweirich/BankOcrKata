@@ -16,4 +16,6 @@ module OCR
       chars.zip(multipliers).inject(0) { |sum, (c,n)| c.to_i * n + sum }
     end
   end
+
+  CHECKER = CheckSum.new
 end
