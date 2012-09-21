@@ -11,11 +11,12 @@ describe OCR::AccountNumber do
   end
 
   context "with illegible digits" do
-    Given(:digits) { "3458?2865" }
+    Given(:digits) { "49006771?" }
     Then { acct.should_not be_valid }
     Then { acct.should_not be_legible }
     Then { acct.show.should == "#{digits} ILL" }
   end
+
 
   context "with invalid digits" do
     Given(:digits) { "345862865" }

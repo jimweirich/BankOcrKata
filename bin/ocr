@@ -2,7 +2,13 @@
 
 require 'ocr'
 
-reader = OCR::AccountReader.new($stdin)
+if ARGV.first == '--no-validation'
+  ARGV.shift
+  reader = OCR::AccountReader.new($stdin, validate: false)
+else
+  reader = OCR::AccountReader.new($stdin)
+end
+
 reader.each do |account_number|
-  puts account_number
+  puts account_number.show
 end

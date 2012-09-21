@@ -4,8 +4,10 @@ module OCR
   class AccountReader
     include Enumerable
 
-    def initialize(in_stream)
+    def initialize(in_stream, opts={})
       @in_stream = in_stream
+      options = {validate: true}.merge(opts)
+      @creation_class = options[:validate] ? AccountNumber : Glyph
     end
 
     def read_account_number
@@ -14,7 +16,7 @@ module OCR
       if result.any? { |ln| ln.nil? }
         nil
       else
-        Glyph.new(result)
+        @creation_class.new(result)
       end
     end
 

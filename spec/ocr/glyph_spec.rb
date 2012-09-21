@@ -93,11 +93,13 @@ describe OCR::Glyph do
     context "with legible chars" do
       Given(:digits) { "0123456789" }
       Then { glyph.value.should == digits }
+      Then { glyph.show.should == digits }
     end
 
     context "with illegible chars" do
       Given(:digits) { "01234?6789" }
       Then { glyph.value.should == digits }
+      Then { glyph.show.should == digits }
     end
   end
 

@@ -33,6 +33,10 @@ module OCR
       value
     end
 
+    def show
+      to_s
+    end
+
     def self.from_digits(string)
       first, *rest = string.chars.map { |nc| FROM_DIGIT[nc] || ["   ", "   ", "   "] }
       lines = first.zip(*rest).map { |f| f.join }
