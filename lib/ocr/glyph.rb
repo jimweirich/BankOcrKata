@@ -3,16 +3,45 @@ module OCR
 
   class Glyph
     TO_DIGIT = {
-      " _ | ||_|" => "0",
-      "     |  |" => "1",
-      " _  _||_ " => "2",
-      " _  _| _|" => "3",
-      "   |_|  |" => "4",
-      " _ |_  _|" => "5",
-      " _ |_ |_|" => "6",
-      " _   |  |" => "7",
-      " _ |_||_|" => "8",
-      " _ |_| _|" => "9",
+      " _ " +
+      "| |" +
+      "|_|" => "0",
+
+      "   " +
+      "  |" +
+      "  |" => "1",
+
+      " _ " +
+      " _|" +
+      "|_ " => "2",
+
+      " _ " +
+      " _|" +
+      " _|" => "3",
+
+      "   " +
+      "|_|" +
+      "  |" => "4",
+
+      " _ " +
+      "|_ " +
+      " _|" => "5",
+
+      " _ " +
+      "|_ " +
+      "|_|" => "6",
+
+      " _ " +
+      "  |" +
+      "  |" => "7",
+
+      " _ " +
+      "|_|" +
+      "|_|" => "8",
+
+      " _ " +
+      "|_|" +
+      " _|" => "9",
     }
 
     attr_reader :value
@@ -24,6 +53,14 @@ module OCR
       check_for_illegal_characters
       check_line_lengths
       @value = calculate_value
+    end
+
+    def legible?
+      ! illegible?
+    end
+
+    def illegible?
+      value =~ /[?]/
     end
 
     def ==(other)
@@ -43,7 +80,7 @@ module OCR
       tops, mids, bots = lines.map { |ln| ln.scan(/.../) }
       encodings = tops.zip(mids, bots).map { |en| en.join }
       encodings.map { |en|
-        TO_DIGIT[en] or fail IllformedGlyphError, "Unrecognized digit #{en}"
+        TO_DIGIT[en] || "?"
       }.join
     end
 
