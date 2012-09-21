@@ -17,9 +17,15 @@ describe OCR::AccountNumber do
     Then { acct.show.should == "#{digits} ILL" }
   end
 
-
   context "with invalid digits" do
     Given(:digits) { "345862865" }
+    Then { acct.should_not be_valid }
+    Then { acct.should be_legible }
+    Then { acct.show.should == "#{digits} ERR" }
+  end
+
+  context "with short digits" do
+    Given(:digits) { "00000000" }
     Then { acct.should_not be_valid }
     Then { acct.should be_legible }
     Then { acct.show.should == "#{digits} ERR" }

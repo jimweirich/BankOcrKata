@@ -1,7 +1,8 @@
 module OCR
   class CheckSum
     def check?(digit_string)
-      check_sum(digit_string) == 0
+      digit_string.size == 9 &&
+        check_sum(digit_string) == 0
     end
 
     def check_sum(digit_string)

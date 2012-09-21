@@ -25,6 +25,8 @@ describe OCR::CheckSum do
       Then { checker.check?("222222222").should_not be_true }
       Then { checker.check?("490067715").should_not be_true }
       Then { checker.check?("664371495").should_not be_true }
+      Then { checker.check?("00000000" ).should_not be_true }
+      Then { checker.check?("0000000000").should_not be_true }
     end
   end
 end
