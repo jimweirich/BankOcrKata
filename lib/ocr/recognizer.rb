@@ -90,4 +90,6 @@ module OCR
     end
   end
 
+  RECOGNIZER = Recognizer.new
+
 end

@@ -3,7 +3,7 @@ require 'spec_helper'
 module OCR
 
   describe Recognizer do
-    Given(:recog) { Recognizer.new }
+    Given(:recog) { RECOGNIZER }
     Then { recog.should_not be_nil }
 
     describe "recognizing" do
