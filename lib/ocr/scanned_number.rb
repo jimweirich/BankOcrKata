@@ -6,6 +6,7 @@ module OCR
   class ScannedNumber
     include ScannedCharacters
 
+    attr_reader :lines
     attr_reader :value
 
     def initialize(lines)
@@ -43,15 +44,18 @@ module OCR
       new(lines)
     end
 
+    def scanned_chars
+      @scanned_chars ||=
+        begin
+          tops, mids, bots = lines.map { |ln| by_width(ln) }
+          tops.zip(mids, bots).map { |en| en.join }
+        end
+    end
+
     private
 
-    attr_reader :lines
-    protected :lines
-
     def calculate_value
-      tops, mids, bots = lines.map { |ln| by_width(ln) }
-      encodings = tops.zip(mids, bots).map { |en| en.join }
-      encodings.map { |en|
+      scanned_chars.map { |en|
         TO_DIGIT[en] || "?"
       }.join
     end

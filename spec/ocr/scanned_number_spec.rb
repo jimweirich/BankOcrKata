@@ -6,6 +6,7 @@ describe OCR::ScannedNumber do
     Given(:number) { OCR::ScannedNumber.new(lines) }
     Invariant { number.should be_legible }
     Invariant { number.should_not be_illegible }
+    Invariant { number.lines.should == lines }
 
     context "with a single numeral" do
       Given(:lines) {
@@ -14,6 +15,7 @@ describe OCR::ScannedNumber do
           "  |" ]
       }
       Then { number.value.should == "1" }
+      Then { number.scanned_chars.should == [lines.join] }
     end
 
     context "with another single numeral" do
@@ -23,6 +25,7 @@ describe OCR::ScannedNumber do
           " _|" ]
       }
       Then { number.value.should == "3" }
+      Then { number.scanned_chars.should == [lines.join] }
     end
 
     context "with multiple numerals" do
@@ -32,6 +35,7 @@ describe OCR::ScannedNumber do
           "  | _|" ]
       }
       Then { number.value.should == "13" }
+      Then { number.scanned_chars.should == ["     |  |", " _  _| _|"] }
     end
 
     context "with all the numerals" do
@@ -100,6 +104,19 @@ describe OCR::ScannedNumber do
       Given(:digits) { "01234?6789" }
       Then { number.value.should == digits }
       Then { number.show.should == digits }
+    end
+  end
+
+  describe "#scanned_chars" do
+    context "with multiple numerals" do
+      Given(:lines) {
+        [ "    _ ",
+          "  | _|",
+          "  | _|" ]
+      }
+      Given(:number) { OCR::ScannedNumber.new(lines) }
+      When(:result) { number.scanned_chars }
+      Then { result.should == ["     |  |", " _  _| _|"] }
     end
   end
 
