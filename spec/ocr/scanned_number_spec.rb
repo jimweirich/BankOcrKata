@@ -6,7 +6,7 @@ describe OCR::ScannedNumber do
     Given(:number) { OCR::ScannedNumber.new(lines) }
     Invariant { number.should be_legible }
     Invariant { number.should_not be_illegible }
-    Invariant { number.lines.should == lines }
+    Invariant { number.scanned_lines.should == lines }
 
     context "with a single numeral" do
       Given(:lines) {
