@@ -3,6 +3,13 @@
 require 'ocr'
 
 reader = OCR::AccountReader.new($stdin)
-reader.each do |account_number|
-  puts account_number.show
+begin
+  reader.each do |account_number|
+    puts account_number.show
+  end
+rescue OCR::IllformedScannedNumberError => ex
+  puts "Error detected on account number starting at line #{ex.line_number}" if ex.line_number
+  puts "Error Message: #{ex.message}"
+  puts "OCR Aborted"
+  exit 1
 end

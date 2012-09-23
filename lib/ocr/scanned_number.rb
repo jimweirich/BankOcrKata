@@ -1,7 +1,13 @@
 require 'ocr/scanned_characters'
 
 module OCR
-  class IllformedScannedNumberError < StandardError; end
+  class IllformedScannedNumberError < StandardError
+    attr_accessor :line_number
+    def initialize(message, line_number=nil)
+      super(message)
+      @line_number = line_number
+    end
+  end
 
   class ScannedNumber
     include ScannedCharacters
@@ -96,28 +102,34 @@ module OCR
 
     def check_proper_number_of_lines
       if scanned_lines.length != 3
-        fail IllformedScannedNumberError, "Must be three lines in #{show_lines}"
+        die("Must be three lines in #{show_error_lines}")
       end
     end
 
     def check_for_illegal_characters
       unless scanned_lines.all? { |string| string =~ /^[ |_]+$/ }
-        fail IllformedScannedNumberError, "Illegal characters in #{show_lines}"
+        die("Illegal characters in #{show_error_lines}")
       end
     end
 
     def check_line_lengths
       lengths = scanned_lines.map { |ln| ln.length }.uniq
       if lengths.size > 1
-        fail IllformedScannedNumberError, "Mismatching line lengths in #{show_lines}"
+        die("Mismatching line lengths in #{show_error_lines}")
       end
       if (lengths.first % 3) != 0
-        fail IllformedScannedNumberError, "Line lengths must be divisible by 3 in #{show_lines}"
+        die("Line lengths must be divisible by 3 in #{show_error_lines}")
       end
     end
 
-    def show_lines
-      "\n" + scanned_lines.join("\n")
+    def die(message)
+      fail IllformedScannedNumberError.new(message)
+    end
+
+    def show_error_lines
+      "\n=============================\n" +
+        scanned_lines.map { |ln| "> #{ln}\n" }.join +
+        "=============================\n"
     end
   end
 
