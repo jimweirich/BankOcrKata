@@ -1,4 +1,3 @@
-require 'ocr/account_reader'
-require 'ocr/scanned_number'
-require 'ocr/check_sum'
-require 'ocr/account_number'
+Dir[File.dirname(__FILE__) + '/ocr/*.rb'].each do |rbfile|
+  require rbfile
+end
