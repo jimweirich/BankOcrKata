@@ -1,3 +1,5 @@
+require 'ocr/scanned_number'
+
 module OCR
   class AccountNumber < ScannedNumber
     def valid?
