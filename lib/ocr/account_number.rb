@@ -1,5 +1,5 @@
 module OCR
-  class AccountNumber < Glyph
+  class AccountNumber < ScannedNumber
     def valid?
       legible? && CHECKER.check?(value)
     end

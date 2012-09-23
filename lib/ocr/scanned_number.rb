@@ -1,10 +1,10 @@
 require 'ocr/scanned_characters'
 
 module OCR
-  class IllformedGlyphError < StandardError; end
+  class IllformedScannedNumberError < StandardError; end
 
-  class Glyph
-    include GlyphConversions
+  class ScannedNumber
+    include ScannedCharacters
 
     attr_reader :value
 
@@ -57,7 +57,7 @@ module OCR
     end
 
     def by_width(string)
-      GlyphConversions.by_width(string)
+      ScannedCharacters.by_width(string)
     end
 
     def normalize_line_lengths
@@ -71,23 +71,23 @@ module OCR
 
     def check_proper_number_of_lines
       if @lines.length != 3
-        fail IllformedGlyphError, "Must be three lines in #{show_lines}"
+        fail IllformedScannedNumberError, "Must be three lines in #{show_lines}"
       end
     end
 
     def check_for_illegal_characters
       unless @lines.all? { |string| string =~ /^[ |_]+$/ }
-        fail IllformedGlyphError, "Illegal characters in #{show_lines}"
+        fail IllformedScannedNumberError, "Illegal characters in #{show_lines}"
       end
     end
 
     def check_line_lengths
       lengths = @lines.map { |ln| ln.length }.uniq
       if lengths.size > 1
-        fail IllformedGlyphError, "Mismatching line lengths in #{show_lines}"
+        fail IllformedScannedNumberError, "Mismatching line lengths in #{show_lines}"
       end
       if (lengths.first % 3) != 0
-        fail IllformedGlyphError, "Line lengths must be divisible by 3 in #{show_lines}"
+        fail IllformedScannedNumberError, "Line lengths must be divisible by 3 in #{show_lines}"
       end
     end
 

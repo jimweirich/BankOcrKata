@@ -7,7 +7,7 @@ module OCR
     def initialize(in_stream, opts={})
       @in_stream = in_stream
       options = {validate: true}.merge(opts)
-      @maker = options[:validate] ? AccountNumber : Glyph
+      @maker = options[:validate] ? AccountNumber : ScannedNumber
     end
 
     def read_account_number

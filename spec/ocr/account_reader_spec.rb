@@ -5,7 +5,7 @@ describe OCR::AccountReader do
   Given(:validate) { true }
   Given(:reader) { OCR::AccountReader.new(input_io, validate: false) }
 
-  context "with a single glyph" do
+  context "with a single scanned number" do
     Given(:lines) { result.lines }
 
     When(:result) { reader.read_account_number }
@@ -16,7 +16,7 @@ describe OCR::AccountReader do
         "|_ \n" +
         " _|\n"
       }
-      Then { result.should == OCR::Glyph.from_digits("5") }
+      Then { result.should == OCR::ScannedNumber.from_digits("5") }
     end
 
     context "terminated by a a blank line" do
@@ -26,7 +26,7 @@ describe OCR::AccountReader do
         " _|\n" +
         "\n"
       }
-      Then { result.should == OCR::Glyph.from_digits("5") }
+      Then { result.should == OCR::ScannedNumber.from_digits("5") }
     end
 
 
@@ -37,7 +37,7 @@ describe OCR::AccountReader do
         " _|\n" +
         "\n"
       }
-      Then { result.should == OCR::Glyph.from_digits("5") }
+      Then { result.should == OCR::ScannedNumber.from_digits("5") }
     end
 
     context "beginning with a line containing spaces" do
@@ -47,7 +47,7 @@ describe OCR::AccountReader do
         "  |\n" +
         "\n"
       }
-      Then { result.should == OCR::Glyph.from_digits("1") }
+      Then { result.should == OCR::ScannedNumber.from_digits("1") }
     end
 
     context "containing multiple numerals" do
@@ -57,10 +57,10 @@ describe OCR::AccountReader do
         "  ||_  _|\n" +
         "\n"
       }
-      Then { result.should == OCR::Glyph.from_digits("123") }
+      Then { result.should == OCR::ScannedNumber.from_digits("123") }
     end
 
-    context "when there is no glyph" do
+    context "when there is no scanned number" do
       Given(:input) { "" }
       Then { result.should be_nil }
     end
@@ -83,8 +83,8 @@ describe OCR::AccountReader do
     When(:result) { reader.to_a }
 
     Then { result.should == [
-        OCR::Glyph.from_digits("123456789"),
-        OCR::Glyph.from_digits("000000051"),
+        OCR::ScannedNumber.from_digits("123456789"),
+        OCR::ScannedNumber.from_digits("000000051"),
       ]
     }
   end

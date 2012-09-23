@@ -1,5 +1,5 @@
 module OCR
-  module GlyphConversions
+  module ScannedCharacters
     TO_DIGIT = {
       " _ " +
       "| |" +
