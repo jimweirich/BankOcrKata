@@ -1,10 +1,6 @@
-require 'rspec/given'
+require 'stories/story_helper'
 
 describe "Error handling" do
-  def contents_of(file_name)
-    open(file_name) { |f| f.read }
-  end
-
   Given(:output_directory) { "tmp" }
   Given(:input_file_name)  { "stories/errors.in" }
   Given(:answer_file_name) { "stories/errors.ans" }

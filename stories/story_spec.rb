@@ -1,10 +1,6 @@
-require 'rspec/given'
+require 'stories/story_helper'
 
 describe "User Stories" do
-  def contents_of(file_name)
-    open(file_name) { |f| f.read }
-  end
-
   Given(:compliance_level) { 4 }
 
   Given(:output_directory) { "tmp" }
