@@ -55,15 +55,23 @@ module OCR
 
     SCANNABLE_CHARS = ('0'..'9').map { |n| FROM_DIGIT[n].join }
 
-    class Guess < Struct.new(:confidence, :char, :scanned_char)
+    class Guess < Struct.new(:confidence, :guessed_char, :guessed_scan, :original_char)
       include Comparable
 
       def initialize(original, guessed)
-        super(diff(original, guessed), TO_DIGIT[guessed], guessed)
+        super(diff(original, guessed), TO_DIGIT[guessed], guessed, original)
       end
 
       def <=>(other)
-        (confidence <=> other.confidence).nonzero? || (char <=> other.char)
+        (confidence <=> other.confidence).nonzero? || (guessed_char <=> other.guessed_char)
+      end
+
+      def to_s
+        "Guess(#{guessed_char})"
+      end
+
+      def inspect
+        "Guess(#{guessed_char}/#{confidence})"
       end
 
       private
@@ -78,7 +86,10 @@ module OCR
     end
 
     def guess(scanned_char, confidence=10)
-      guess_all(scanned_char).select { |guess| guess.confidence <= confidence }
+      guess_all(scanned_char).select { |guess|
+        guess.confidence > 0 &&
+        guess.confidence <= confidence
+      }
     end
 
     private

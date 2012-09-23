@@ -32,12 +32,23 @@ module OCR
       end
 
       context "with a confidence level of 1" do
-        Given(:scanned_char) {  "  |  |  |" }
-        Given(:expected_guesses) { [ Recognizer::Guess.new(scanned_char, "     |  |") ] }
+        context "when the scan is ambiguous" do
+          Given(:scanned_char) {  "  |  |  |" }
+          Given(:expected_guesses) { [ Recognizer::Guess.new(scanned_char, "     |  |") ] }
 
-        When(:result) { recog.guess(scanned_char, 1) }
+          When(:result) { recog.guess(scanned_char, 1) }
 
-        Then { result.should == expected_guesses }
+          Then { result.should == expected_guesses }
+        end
+
+        context "when the scan is not ambiguous" do
+          Given(:scanned_char) {  "     |  |" }
+          Given(:expected_guesses) { [ Recognizer::Guess.new(scanned_char, " _   |  |") ] }
+
+          When(:result) { recog.guess(scanned_char, 1) }
+
+          Then { result.should == expected_guesses }
+        end
       end
     end
 

@@ -23,7 +23,7 @@ module OCR
     end
 
     def illegible?
-      value =~ /[?]/
+      contains_illegible_digit?(value)
     end
 
     def ==(other)
@@ -38,8 +38,23 @@ module OCR
       to_s
     end
 
+    def alternatives
+      result = []
+      prefix = []
+      suffix = scanned_chars.dup
+      while !suffix.empty?
+        ch = suffix.shift
+        RECOGNIZER.guess(ch, 1).each do |guess|
+          digits = recognize(prefix) + guess.guessed_char + recognize(suffix)
+          result << digits unless contains_illegible_digit?(digits)
+        end
+        prefix.push(ch)
+      end
+      result
+    end
+
     def self.from_digits(string)
-      first, *rest = string.chars.map { |nc| FROM_DIGIT[nc] || ["   ", "   ", "   "] }
+      first, *rest = string.chars.map { |nc| FROM_DIGIT[nc] || ["  |", "  |", "  |"] }
       lines = first.zip(*rest).map { |f| f.join }
       new(lines)
     end
@@ -54,10 +69,16 @@ module OCR
 
     private
 
+    def contains_illegible_digit?(string)
+      string =~ /[?]/
+    end
+
     def calculate_value
-      scanned_chars.map { |en|
-        TO_DIGIT[en] || "?"
-      }.join
+      recognize(scanned_chars)
+    end
+
+    def recognize(scanned_characters)
+      scanned_characters.map { |sc| RECOGNIZER.recognize(sc) }.join
     end
 
     def by_width(string)

@@ -110,15 +110,47 @@ module OCR
     end
 
     describe "#scanned_chars" do
-      context "with multiple numerals" do
+      Given(:lines) {
+        [ "    _ ",
+          "  | _|",
+          "  | _|" ]
+      }
+      Given(:number) { ScannedNumber.new(lines) }
+      When(:result) { number.scanned_chars }
+      Then { result.should == ["     |  |", " _  _| _|"] }
+    end
+
+    describe "#alternatives" do
+      context "with legible input" do
         Given(:lines) {
-          [ "    _ ",
-            "  | _|",
-            "  | _|" ]
+          [ "                           ",
+            "  |  |  |  |  |  |  |  |  |",
+            "  |  |  |  |  |  |  |  |  |" ]
         }
         Given(:number) { ScannedNumber.new(lines) }
-        When(:result) { number.scanned_chars }
-        Then { result.should == ["     |  |", " _  _| _|"] }
+        When(:result) { number.alternatives }
+        Then { result.should == [
+            "711111111",
+            "171111111",
+            "117111111",
+            "111711111",
+            "111171111",
+            "111117111",
+            "111111711",
+            "111111171",
+            "111111117",
+          ] }
+      end
+
+      context "with illegible input" do
+        Given(:lines) {
+          [ "                          |",
+            "  |  |  |  |  |  |  |  |  |",
+            "  |  |  |  |  |  |  |  |  |" ]
+        }
+        Given(:number) { ScannedNumber.new(lines) }
+        When(:result) { number.alternatives }
+        Then { result.should == [ "111111111" ] }
       end
     end
 
