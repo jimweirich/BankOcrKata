@@ -1,4 +1,4 @@
-require 'ocr/glyph_conversions'
+require 'ocr/scanned_characters'
 
 module OCR
   class IllformedGlyphError < StandardError; end

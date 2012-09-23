@@ -1,4 +1,4 @@
-require 'ocr/glyph'
+require 'ocr/scanned_number'
 
 module OCR
   class AccountReader
