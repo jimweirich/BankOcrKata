@@ -1,5 +1,3 @@
-#!/usr/bin/ruby -wKU
-
 def lines_to_schars(lines)
   tops, mids, bots = lines.map { |str| str.scan(/.../) }
   tops.zip(mids, bots).map { |sc| sc.join }
@@ -30,16 +28,13 @@ def value_of(snum)
 end
 
 def check?(account_number)
-  sum = account_number.chars.to_a.reverse.
-    zip((1..9).to_a).inject(0) { |acc, (ch, mul)| acc + ch.to_i * mul }
-  (sum % 11) == 0
+  (account_number.chars.to_a.reverse.zip((1..9).to_a).inject(0) { |acc, (ch, mul)| acc + ch.to_i * mul } % 11) == 0
 end
 
 def one_away(scanned_char)
-  possiblities = TO_DIGIT.keys.map { |sc|
+  TO_DIGIT.keys.map { |sc|
     [sc.chars.zip(scanned_char.chars).map { |a,b| a == b }.count(false), sc]
-  }
-  possiblities.select { |delta, sc| delta == 1 }.map { |delta, sc| sc }
+  }.select { |delta, sc| delta == 1 }.map { |delta, sc| sc }
 end
 
 def alternatives(snum)
