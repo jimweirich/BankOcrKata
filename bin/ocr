@@ -24,8 +24,8 @@ def value_of(snum)
   snum.map { |sc| TO_DIGIT[sc] || "?" }.join
 end
 
-def check?(account_number)
-  (account_number.chars.to_a.reverse.zip((1..9).to_a).inject(0) { |acc, (ch, mul)| acc + ch.to_i * mul } % 11) == 0
+def check?(num)
+  (num.chars.zip(9.downto(1)).inject(0) { |acc, (ch, mul)| acc + ch.to_i * mul } % 11) == 0
 end
 
 def one_away(scanned_char)
