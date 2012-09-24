@@ -36,7 +36,7 @@ module OCR
           " _|\n" +
           "\n"
         }
-        Then { result.should == ScannedNumber.from_digits("5") }
+        Then { result.should == AccountNumber.from_digits("5") }
       end
 
       context "beginning with a line containing spaces" do
@@ -46,7 +46,7 @@ module OCR
           "  |\n" +
           "\n"
         }
-        Then { result.should == ScannedNumber.from_digits("1") }
+        Then { result.should == AccountNumber.from_digits("1") }
       end
 
       context "containing multiple numerals" do
@@ -56,7 +56,7 @@ module OCR
           "  ||_  _|\n" +
           "\n"
         }
-        Then { result.should == ScannedNumber.from_digits("123") }
+        Then { result.should == AccountNumber.from_digits("123") }
       end
 
       context "when there is no scanned number" do
@@ -82,8 +82,8 @@ module OCR
       When(:result) { reader.to_a }
 
       Then { result.should == [
-          ScannedNumber.from_digits("123456789"),
-          ScannedNumber.from_digits("000000051"),
+          AccountNumber.from_digits("123456789"),
+          AccountNumber.from_digits("000000051"),
         ]
       }
     end
