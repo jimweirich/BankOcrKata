@@ -5,7 +5,7 @@ describe "User Stories" do
     open(file_name) { |f| f.read }
   end
 
-  Given(:compliance_level) { 2 }
+  Given(:compliance_level) { 3 }
 
   Given(:output_directory) { "tmp" }
   Given(:input_file_name)  { "stories/usecase#{story}.in" }

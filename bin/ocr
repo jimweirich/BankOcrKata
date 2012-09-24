@@ -46,7 +46,7 @@ def read_account_number
     str.scan(/.../)
   }
   gets
-  tops.zip(mids, bots).map { |sc| TO_DIGIT[sc.join] }.join
+  tops.zip(mids, bots).map { |sc| TO_DIGIT[sc.join] || "?" }.join
 end
 
 def check?(account_number)
@@ -55,5 +55,11 @@ def check?(account_number)
 end
 
 while account_number = read_account_number
-  puts "#{account_number}, #{check?(account_number)}"
+  if account_number =~ /[?]/
+    puts "#{account_number} ILL"
+  elsif check?(account_number)
+    puts account_number
+  else
+    puts "#{account_number} ERR"
+  end
 end
