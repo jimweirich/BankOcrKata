@@ -1,0 +1,54 @@
+#!/usr/bin/ruby -wKU
+
+TO_DIGIT = {
+  " _ " +
+  "| |" +
+  "|_|" => "0",
+  "   " +
+  "  |" +
+  "  |" => "1",
+  " _ " +
+  " _|" +
+  "|_ " => "2",
+  " _ " +
+  " _|" +
+  " _|" => "3",
+  "   " +
+  "|_|" +
+  "  |" => "4",
+  " _ " +
+  "|_ " +
+  " _|" => "5",
+  " _ " +
+  "|_ " +
+  "|_|" => "6",
+  " _ " +
+  "  |" +
+  "  |" => "7",
+  " _ " +
+  "|_|" +
+  "|_|" => "8",
+  " _ " +
+  "|_|" +
+  " _|" => "9",
+}
+
+def read_line
+  line = gets
+  return nil if line.nil?
+  line.chomp.ljust(9*3)
+end
+
+def read_account_number
+  lines = [read_line, read_line, read_line]
+  return nil if lines.any? { |ln| ln.nil? }
+  tops, mids, bots = lines.map { |str|
+    str.scan(/.../)
+  }
+  gets
+  tops.zip(mids, bots).map { |sc| TO_DIGIT[sc.join] }.join
+end
+
+while account_number = read_account_number
+  puts account_number
+end
