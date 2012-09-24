@@ -4,12 +4,9 @@ module OCR
 
   describe AccountReader do
     Given(:input_io) { StringIO.new(input) }
-    Given(:validate) { true }
-    Given(:reader) { AccountReader.new(input_io, validate: false) }
+    Given(:reader) { AccountReader.new(input_io) }
 
     context "with a single scanned number" do
-      Given(:lines) { result.lines }
-
       When(:result) { reader.read_account_number }
 
       context "terminated by an end of file" do

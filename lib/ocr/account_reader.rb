@@ -4,7 +4,7 @@ module OCR
   class AccountReader
     include Enumerable
 
-    def initialize(in_stream, opts={})
+    def initialize(in_stream)
       @in_stream = in_stream
       @line_number = 0
     end
