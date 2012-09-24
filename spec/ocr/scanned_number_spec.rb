@@ -20,7 +20,7 @@ module OCR
         Then { number.scanned_chars.should == [lines.join] }
       end
 
-      context "with another single numeral" do
+      context "with different single numeral" do
         Given(:lines) {
           [ " _ ",
             " _|",
