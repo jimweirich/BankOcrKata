@@ -13,22 +13,14 @@ module OCR
     def show
       if valid?
         value
-      elsif illegible?
-        alts = valid_alternatives
-        "#{value} ILL"
-        if alts.size == 1
-          alts.first
-        elsif alts.size > 1
-          "#{value} AMB [" + alts.map { |a| "'#{a}'" }.join(", ") + "]"
-        else
-          "#{value} ILL"
-        end
       else
         alts = valid_alternatives
         if alts.size == 1
           alts.first
         elsif alts.size > 1
           "#{value} AMB [" + alts.map { |a| "'#{a}'" }.join(", ") + "]"
+        elsif illegible?
+          "#{value} ILL"
         else
           "#{value} ERR"
         end
