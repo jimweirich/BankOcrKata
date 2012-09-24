@@ -1,15 +1,20 @@
 # Bank OCR Kata
 
-This repo contains a Ruby solution to the Bank OCR Kata defined at
+This repo contains two Ruby solutions to the Bank OCR Kata defined at
 (http://www.codingdojo.org/cgi-bin/wiki.pl?KataBankOCR)
 
-The master branch as the following tags:
+The first solution is on the master branch. The master branch as the
+following tags:
 
 * start-here -- User story specs, but no code.
 * master-story1 -- The solution for user case 1
 * master-story2 -- The solution for user case 2
 * master-story3 -- The solution for user case 3
 * master-story4 -- The solution for user case 4
+
+The second implementation is on a branch named 'minimal'. It relies
+only on the story specs and is a single file with hardly any domain
+abstractions at all.
 
 ## User Story Specs
 
