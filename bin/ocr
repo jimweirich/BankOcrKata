@@ -56,7 +56,7 @@ while snum = read_scanned_number
   else
     alt_nums = alternatives(snum)
     if alt_nums.size == 1
-      puts alt_nums.first
+      puts alt_nums
     elsif alt_nums.size > 1
       puts "#{num} AMB [#{alt_nums.map { |an| "'#{an}'" }.join(", ")}]"
     elsif num =~ /[?]/
