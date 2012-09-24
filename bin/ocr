@@ -1,37 +1,18 @@
 #!/usr/bin/ruby -wKU
 
-TO_DIGIT = {
-  " _ " +
-  "| |" +
-  "|_|" => "0",
-  "   " +
-  "  |" +
-  "  |" => "1",
-  " _ " +
-  " _|" +
-  "|_ " => "2",
-  " _ " +
-  " _|" +
-  " _|" => "3",
-  "   " +
-  "|_|" +
-  "  |" => "4",
-  " _ " +
-  "|_ " +
-  " _|" => "5",
-  " _ " +
-  "|_ " +
-  "|_|" => "6",
-  " _ " +
-  "  |" +
-  "  |" => "7",
-  " _ " +
-  "|_|" +
-  "|_|" => "8",
-  " _ " +
-  "|_|" +
-  " _|" => "9",
-}
+def lines_to_schars(lines)
+  tops, mids, bots = lines.map { |str| str.scan(/.../) }
+  tops.zip(mids, bots).map { |sc| sc.join }
+end
+
+TO_DIGIT = { }
+lines_to_schars(
+  [ " _     _  _     _  _  _  _  _ ",
+    "| |  | _| _||_||_ |_   ||_||_|",
+    "|_|  ||_  _|  | _||_|  ||_| _|",
+  ]).each.with_index do |sc, i|
+  TO_DIGIT[sc] = i.to_s
+end
 
 def read_line
   (line = gets) ? line.chomp.ljust(9*3) : nil
@@ -41,8 +22,7 @@ def read_scanned_number
   lines = [read_line, read_line, read_line]
   return nil if lines.any? { |ln| ln.nil? }
   gets
-  tops, mids, bots = lines.map { |str| str.scan(/.../) }
-  tops.zip(mids, bots).map { |sc| sc.join }
+  lines_to_schars(lines)
 end
 
 def value_of(snum)
