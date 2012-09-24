@@ -78,7 +78,7 @@ checksum calculation:
 So now you should also write some code that calculates the checksum
 for a given number, and identifies if it is a valid account number.
 
-## User Story 3
+### User Story 3
 
 Your boss is keen to see your results. He asks you to write out a file
 of your findings, one for each input file, in this format:
