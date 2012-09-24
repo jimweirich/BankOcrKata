@@ -49,6 +49,11 @@ def read_account_number
   tops.zip(mids, bots).map { |sc| TO_DIGIT[sc.join] }.join
 end
 
+def check?(account_number)
+  sum = account_number.chars.to_a.reverse.zip((1..9).to_a).inject(0) { |acc, (ch, mul)| acc + ch.to_i * mul }
+  (sum % 11) == 0
+end
+
 while account_number = read_account_number
-  puts account_number
+  puts "#{account_number}, #{check?(account_number)}"
 end
