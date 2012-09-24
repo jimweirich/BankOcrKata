@@ -1,14 +1,7 @@
 require 'ocr/scanned_characters'
+require 'ocr/errors'
 
 module OCR
-  class IllformedScannedNumberError < StandardError
-    attr_accessor :line_number
-    def initialize(message, line_number=nil)
-      super(message)
-      @line_number = line_number
-    end
-  end
-
   class ScannedNumber
     include ScannedCharacters
 

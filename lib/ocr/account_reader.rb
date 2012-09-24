@@ -10,7 +10,7 @@ module OCR
     end
 
     def read_account_number
-      starting_line = @line_number + 1
+      starting_line = next_line_number
       result = (0...3).map { read_line }
       read_line
       if result.any? { |ln| ln.nil? }
@@ -18,7 +18,7 @@ module OCR
       else
         AccountNumber.new(result)
       end
-    rescue IllformedScannedNumberError => ex
+    rescue OCR::StandardError => ex
       ex.line_number = starting_line
       raise ex
     end
@@ -32,9 +32,13 @@ module OCR
     private
 
     def read_line
-      @line_number += 1
+      @line_number = next_line_number
       result = @in_stream.gets
       result && result.chomp
+    end
+
+    def next_line_number
+      @line_number + 1
     end
   end
 
