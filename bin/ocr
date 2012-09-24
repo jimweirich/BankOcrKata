@@ -3,14 +3,11 @@ def lines_to_schars(lines)
   tops.zip(mids, bots).map { |sc| sc.join }
 end
 
-TO_DIGIT = { }
-lines_to_schars(
+TO_DIGIT = lines_to_schars(
   [ " _     _  _     _  _  _  _  _ ",
     "| |  | _| _||_||_ |_   ||_||_|",
     "|_|  ||_  _|  | _||_|  ||_| _|",
-  ]).each.with_index do |sc, i|
-  TO_DIGIT[sc] = i.to_s
-end
+  ]).inject({}) { |acc, sc| acc.merge(sc => acc.size) }
 
 def read_line
   (line = gets) ? line.chomp.ljust(9*3) : nil
