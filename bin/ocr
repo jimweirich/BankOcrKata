@@ -34,32 +34,63 @@ TO_DIGIT = {
 }
 
 def read_line
-  line = gets
-  return nil if line.nil?
-  line.chomp.ljust(9*3)
+  (line = gets) ? line.chomp.ljust(9*3) : nil
 end
 
-def read_account_number
+def read_scanned_number
   lines = [read_line, read_line, read_line]
   return nil if lines.any? { |ln| ln.nil? }
-  tops, mids, bots = lines.map { |str|
-    str.scan(/.../)
-  }
   gets
-  tops.zip(mids, bots).map { |sc| TO_DIGIT[sc.join] || "?" }.join
+  tops, mids, bots = lines.map { |str| str.scan(/.../) }
+  tops.zip(mids, bots).map { |sc| sc.join }
+end
+
+def value_of(snum)
+  snum.map { |sc| TO_DIGIT[sc] || "?" }.join
 end
 
 def check?(account_number)
-  sum = account_number.chars.to_a.reverse.zip((1..9).to_a).inject(0) { |acc, (ch, mul)| acc + ch.to_i * mul }
+  sum = account_number.chars.to_a.reverse.
+    zip((1..9).to_a).inject(0) { |acc, (ch, mul)| acc + ch.to_i * mul }
   (sum % 11) == 0
 end
 
-while account_number = read_account_number
-  if account_number =~ /[?]/
-    puts "#{account_number} ILL"
-  elsif check?(account_number)
-    puts account_number
+def one_away(scanned_char)
+  possiblities = TO_DIGIT.keys.map { |sc|
+    [sc.chars.zip(scanned_char.chars).map { |a,b| a == b }.count(false), sc]
+  }
+  possiblities.select { |delta, sc| delta == 1 }.map { |delta, sc| sc }
+end
+
+def alternatives(snum)
+  result = []
+  prefix = []
+  suffix = snum.dup
+  while ! suffix.empty?
+    sch = suffix.shift
+    one_away(sch).each do |alt_ch|
+      alt_num = value_of(prefix + [alt_ch] + suffix)
+      result << alt_num if alt_num !~ /[?]/ && check?(alt_num)
+    end
+    prefix.push(sch)
+  end
+  result.sort
+end
+
+while snum = read_scanned_number
+  num = value_of(snum)
+  if num !~ /[?]/ && check?(num)
+    puts num
   else
-    puts "#{account_number} ERR"
+    alt_nums = alternatives(snum)
+    if alt_nums.size == 1
+      puts alt_nums.first
+    elsif alt_nums.size > 1
+      puts "#{num} AMB [#{alt_nums.map { |an| "'#{an}'" }.join(", ")}]"
+    elsif num =~ /[?]/
+      puts "#{num} ILL"
+    else
+      puts "#{num} ERR"
+    end
   end
 end
